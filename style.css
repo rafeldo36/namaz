@@ -1,6 +1,6 @@
 body{
     background-image: linear-gradient(180deg, rgb(0, 44, 85), rgb(81, 150, 207));
-    height: 150vh;
+    height: auto;
 }
 
 nav{
