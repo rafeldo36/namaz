@@ -19,7 +19,6 @@ fetch('https://muslimsalat.p.rapidapi.com/'+city, options)
         asr.innerHTML=response.items[0].asr
         maghrib.innerHTML=response.items[0].maghrib
         isha.innerHTML=response.items[0].isha
-        date.innerHTML=response.items[0].date_for
     })
 	.catch(err => console.error(err));
 
