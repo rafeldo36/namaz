@@ -39,3 +39,8 @@ p{
     border-radius: 15px;
     background-color: rgb(182, 228, 255);
 }
+
+footer{
+    position: absolute;bottom: 0; 
+    right: 500px;
+}
