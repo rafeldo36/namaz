@@ -4,7 +4,7 @@
    }
 body{
     background-image: linear-gradient(180deg, rgb(1, 24, 46), rgb(81, 150, 207));
-    height: 110vh;
+    height: 130vh;
 }
 
 nav{
@@ -40,7 +40,8 @@ p{
 }
 
 footer{
-    position: absolute;bottom: 0; 
+    position: absolute; 
+    bottom: 0px; 
     right: 500px;
 }
 
