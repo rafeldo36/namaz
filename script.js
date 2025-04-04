@@ -1,9 +1,9 @@
 const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': '00af0390b2mshba13b381a262395p1947bajsne99840195496',
-		'X-RapidAPI-Host': 'muslimsalat.p.rapidapi.com'
-	}
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': '00af0390b2mshba13b381a262395p1947bajsne99840195496',
+    'X-RapidAPI-Host': 'muslimsalat.p.rapidapi.com'
+  }
 };
 
 function startTime() {
@@ -38,8 +38,8 @@ function startTime() {
 const getTime = (city)=>{
 
 fetch('https://muslimsalat.p.rapidapi.com/'+city, options)
-	.then(response => response.json())
-	.then(response => {console.log(response)
+  .then(response => response.json())
+  .then(response => {console.log(response)
         cityName.innerHTML=response.query
         country.innerHTML=response.country
         sunrise.innerHTML=response.items[0].shurooq
@@ -51,7 +51,7 @@ fetch('https://muslimsalat.p.rapidapi.com/'+city, options)
 
         updateActivePrayer();
     })
-	.catch(err => console.error(err));
+  .catch(err => console.error(err));
 
 }
 submit.addEventListener("click",(e)=>{
