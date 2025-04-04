@@ -126,6 +126,7 @@ footer a:hover {
     background-color: rgba(229, 240, 248, 0.3);
     box-shadow: 0 0 0 0.25rem rgba(107, 220, 248, 0.25);
     border-color: #ffffff;
+    color: white;
     outline: 0;
     transition: all 0.3s ease;
 }
