@@ -1,6 +1,6 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,31 +10,256 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Add this with your other scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your user ID
+        emailjs.init('6JVfJfem88bi5OxEG'); // Replace with your actual EmailJS user ID
+    </script>
 </head>
-
 <body onload="startTime()">
     <div class="islamic-pattern"></div>
     <i class="fas fa-moon moon-icon"></i>
-    
+
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-mosque"></i> Namaz Timing
             </a>
-            <form class="d-flex" role="search">
-                <input id="city" class="form-control me-2" type="search" placeholder="Enter a city..." aria-label="Search">
-                <input type="hidden" id="key" value=".json">
-                <button class="btn btn-outline-primary" type="submit" id="submit">
-                    <i class="fas fa-search"></i> Search
+            <div class="d-flex">
+                <button class="btn btn-outline-primary me-2 admin-only" data-bs-toggle="modal" data-bs-target="#addMosqueModal">
+                    <i class="fas fa-plus"></i> Add Mosque
                 </button>
-            </form>
+                <button class="btn btn-outline-primary me-2 admin-only" data-bs-toggle="modal" data-bs-target="#editMosqueModal">
+                    <i class="fas fa-edit"></i> Edit Mosque
+                </button>
+                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#findMosqueModal">
+                    <i class="fas fa-mosque"></i> Find Mosque
+                </button>
+                <form class="d-flex" role="search">
+                    <input id="city" class="form-control me-2" type="search" placeholder="Enter a city..." aria-label="Search">
+                    <input type="hidden" id="key" value=".json">
+                    <button class="btn btn-outline-primary" type="submit" id="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </form>
+            </div>
         </div>
     </nav>
-    
+
+    <!-- Find Mosque Modal -->
+<div class="modal fade" id="findMosqueModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Find Your Mosque</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="mosqueSearch" placeholder="Search by mosque name or place...">
+                    <button class="btn btn-primary" type="button" id="searchMosqueBtn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div id="searchResults" class="mt-3"></div>
+                
+                <!-- Can't Find Mosque Section -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-warning" data-bs-toggle="collapse" data-bs-target="#mosqueRequestForm">
+                        <i class="fas fa-question-circle"></i> Can't Find Your Mosque?
+                    </button>
+                    
+                    <div id="mosqueRequestForm" class="collapse mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Submit Mosque Details</h5>
+                                <p>We'll add it to our database after verification</p>
+                                
+                                <form id="mosqueRequestForm">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mosque Name*</label>
+                                        <input type="text" class="form-control" id="requestMosqueName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Location*</label>
+                                        <input type="text" class="form-control" id="requestMosqueLocation" required>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Fajr Time</label>
+                                            <input type="time" class="form-control" id="requestFajrTime">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Zuhr Time</label>
+                                            <input type="time" class="form-control" id="requestZuhrTime">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Asr Time</label>
+                                            <input type="time" class="form-control" id="requestAsrTime">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Maghrib Time</label>
+                                            <input type="time" class="form-control" id="requestMaghribTime">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Isha Time</label>
+                                            <input type="time" class="form-control" id="requestIshaTime">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 mt-3">
+                                        <label class="form-label">Your Email (optional)</label>
+                                        <input type="email" class="form-control" id="requestUserEmail">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-paper-plane"></i> Submit Request
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Add Mosque Modal -->
+    <div class="modal fade" id="addMosqueModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Mosque Prayer Times</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="mosqueForm" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label required-field">Mosque Name</label>
+                            <input type="text" class="form-control" id="mosqueName" required>
+                            <div class="invalid-feedback">Please enter a mosque name</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required-field">Place/City</label>
+                            <input type="text" class="form-control" id="mosquePlace" required>
+                            <div class="invalid-feedback">Please enter a place/city</div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label required-field">Fajr Time</label>
+                                <input type="time" class="form-control" id="fajrTime" required>
+                                <div class="invalid-feedback">Please enter Fajr time</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required-field">Zuhr Time</label>
+                                <input type="time" class="form-control" id="zuhrTime" required>
+                                <div class="invalid-feedback">Please enter Zuhr time</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required-field">Asr Time</label>
+                                <input type="time" class="form-control" id="asrTime" required>
+                                <div class="invalid-feedback">Please enter Asr time</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required-field">Maghrib Time</label>
+                                <input type="time" class="form-control" id="maghribTime" required>
+                                <div class="invalid-feedback">Please enter Maghrib time</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required-field">Isha Time</label>
+                                <input type="time" class="form-control" id="ishaTime" required>
+                                <div class="invalid-feedback">Please enter Isha time</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="saveMosqueBtn">Save Mosque</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mosque Modal -->
+    <div class="modal fade" id="editMosqueModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Mosque</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="editMosqueSearch" placeholder="Search mosque to edit...">
+                        <button class="btn btn-primary" type="button" id="searchEditMosqueBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div id="editMosqueResults" class="mt-3"></div>
+                    <div id="editMosqueFormContainer" style="display: none;">
+                        <form id="editMosqueForm" novalidate>
+                            <input type="hidden" id="editMosqueId">
+                            <div class="mb-3">
+                                <label class="form-label required-field">Mosque Name</label>
+                                <input type="text" class="form-control" id="editMosqueName" required>
+                                <div class="invalid-feedback">Please enter a mosque name</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required-field">Place/City</label>
+                                <input type="text" class="form-control" id="editMosquePlace" required>
+                                <div class="invalid-feedback">Please enter a place/city</div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Fajr Time</label>
+                                    <input type="time" class="form-control" id="editFajrTime" required>
+                                    <div class="invalid-feedback">Please enter Fajr time</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Zuhr Time</label>
+                                    <input type="time" class="form-control" id="editZuhrTime" required>
+                                    <div class="invalid-feedback">Please enter Zuhr time</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Asr Time</label>
+                                    <input type="time" class="form-control" id="editAsrTime" required>
+                                    <div class="invalid-feedback">Please enter Asr time</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Maghrib Time</label>
+                                    <input type="time" class="form-control" id="editMaghribTime" required>
+                                    <div class="invalid-feedback">Please enter Maghrib time</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label required-field">Isha Time</label>
+                                    <input type="time" class="form-control" id="editIshaTime" required>
+                                    <div class="invalid-feedback">Please enter Isha time</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="updateMosqueBtn" style="display: none;">
+                        <i class="fas fa-save"></i> Update Mosque
+                    </button>
+                    <button type="button" class="btn btn-danger" id="deleteMosqueBtn" style="display: none;">
+                        <i class="fas fa-trash"></i> Delete Mosque
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h4 class="text-center my-4">
         <i class="fas fa-clock"></i> Hanafi Prayer Times for <span id="cityName"></span>, <span id="country"></span>
     </h4>
-    
+
     <div class="container">
         <div class="row g-4 justify-content-center">
             <div class="col-md-6 col-lg-3">
@@ -47,7 +272,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100">
                     <div class="card-body text-center">
@@ -58,7 +283,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100">
                     <div class="card-body text-center">
@@ -69,9 +294,9 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
-                <div class="card h-100 active-prayer" id="fajrCard">
+                <div class="card h-100" id="fajrCard">
                     <div class="card-body text-center">
                         <h5 class="card-title">
                             <i class="fas fa-pray prayer-icon"></i> Fajr
@@ -80,7 +305,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100" id="zuhrCard">
                     <div class="card-body text-center">
@@ -91,7 +316,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100" id="asrCard">
                     <div class="card-body text-center">
@@ -102,7 +327,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100" id="maghribCard">
                     <div class="card-body text-center">
@@ -113,7 +338,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 col-lg-3">
                 <div class="card h-100" id="ishaCard">
                     <div class="card-body text-center">
@@ -126,19 +351,18 @@
             </div>
         </div>
     </div>
-    
+
     <footer class="text-center py-4">
         <h5>
-            <i class="fas fa-code"></i> Design & Developed By 
+            <i class="fas fa-code"></i> Design & Developed By
             <a href="https://rafey.netlify.app" target="_blank">Rafey Ansari</a>
+            <button onclick="logout()" class="btn btn-outline-danger position-fixed bottom-0 end-0 m-3 admin-only">Exit Admin</button>
         </h5>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      
-    </script>
 </body>
-
-</html>
+    </html>
