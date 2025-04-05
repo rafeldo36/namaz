@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'digital-clock-font';
     src: url('digital-7.ttf');
@@ -86,6 +87,40 @@ nav {
     border: 1px solid rgba(87, 196, 229, 0.3);
 }
 
+#txt{
+    font-family: 'digital-clock-font';
+    font-size: 1.5rem;
+    color: #00ff80;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid rgba(87, 196, 229, 0.3);
+}
+#current_date{
+    font-family: 'digital-clock-font';
+    font-size: 1.5rem;
+    color: #d9ff00;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid rgba(87, 196, 229, 0.3);
+}
+#sunrise{
+    font-family: 'digital-clock-font';
+    font-size: 1.5rem;
+    color: #ff9900;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid rgba(87, 196, 229, 0.3);
+}
+
 .active-prayer {
     background: linear-gradient(135deg, #1a5f7a 0%, #57c4e5 100%);
     color: white;
@@ -157,4 +192,154 @@ footer a:hover {
     .card {
         margin-bottom: 15px;
     }
+}
+
+/* Modal Styles */
+.modal-content {
+    background: linear-gradient(135deg, #0a3a40 0%, #1a5f7a 100%);
+    border: 1px solid rgba(248, 241, 229, 0.1);
+    color: #f8f1e5;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(248, 241, 229, 0.1);
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(248, 241, 229, 0.1);
+}
+
+.form-control {
+    background-color: rgba(248, 241, 229, 0.1);
+    border: 1px solid rgba(248, 241, 229, 0.3);
+    color: #f8f1e5;
+}
+
+.form-control:focus {
+    background-color: rgba(248, 241, 229, 0.2);
+    border-color: #f8d56b;
+    color: #f8f1e5;
+}
+
+.form-label {
+    color: #f8d56b;
+}
+
+.required-field::after {
+    content: " *";
+    color: red;
+}
+
+/* Style for invalid fields */
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* Mosque Search Results */
+.mosque-result {
+    background: rgba(10, 58, 64, 0.7);
+    border: 1px solid rgba(248, 241, 229, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mosque-result:hover {
+    background: rgba(10, 58, 64, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mosque-result .card-body {
+    padding: 1.25rem;
+}
+
+.mosque-result h5 {
+    color: #f8d56b;
+    margin-bottom: 0.5rem;
+}
+
+.mosque-result .text-muted {
+    color: #a7c4bc !important;
+}
+
+.mosque-result p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Search input */
+#mosqueSearch {
+    background-color: rgba(248, 241, 229, 0.1);
+    border: 1px solid rgba(248, 241, 229, 0.3);
+    color: #f8f1e5;
+}
+
+#mosqueSearch:focus {
+    background-color: rgba(248, 241, 229, 0.2);
+    border-color: #f8d56b;
+    color: #f8f1e5;
+    box-shadow: 0 0 0 0.25rem rgba(248, 209, 107, 0.25);
+}
+
+/* Edit Mosque Modal Styles */
+#editMosqueFormContainer {
+    padding: 15px;
+    background: rgba(10, 58, 64, 0.5);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Make sure the edit form matches the add form style */
+#editMosqueForm input[type="time"],
+#editMosqueForm input[type="text"] {
+    background-color: rgba(248, 241, 229, 0.1);
+    border: 1px solid rgba(248, 241, 229, 0.3);
+    color: #f8f1e5;
+}
+
+#editMosqueForm input[type="time"]:focus,
+#editMosqueForm input[type="text"]:focus {
+    background-color: rgba(248, 241, 229, 0.2);
+    border-color: #f8d56b;
+    color: #f8f1e5;
+    box-shadow: 0 0 0 0.25rem rgba(248, 209, 107, 0.25);
+}
+
+/* Action buttons */
+#updateMosqueBtn {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+#deleteMosqueBtn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Mosque Request Form Styles */
+#mosqueRequestForm .card {
+    background: rgba(10, 58, 64, 0.7);
+    border: 1px solid rgba(248, 241, 229, 0.1);
+}
+
+#mosqueRequestForm .card-body {
+    padding: 1.5rem;
+}
+
+#mosqueRequestForm .form-label {
+    color: #f8d56b;
+}
+
+#mosqueRequestForm .btn-outline-warning {
+    color: #f8d56b;
+    border-color: #f8d56b;
+}
+
+#mosqueRequestForm .btn-outline-warning:hover {
+    background-color: rgba(248, 213, 107, 0.1);
 }
