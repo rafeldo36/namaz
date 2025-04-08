@@ -68,7 +68,7 @@ const firebaseConfig = {
   document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      alert('Thank you for submitting your mosque details! We will verify and add it soon. Redirecting you to our WhatsApp group...');
+      alert('Thank you for submitting your mosque details! We will verify and add them soon.You will now be redirected to our WhatsApp group. To update mosque timings, please send a message in the group with your mosque name. Our admin will update the details accordingly.');
       
       const whatsappGroupLink = "https://chat.whatsapp.com/H2hWPyy0ngM7Fu1UA7SZBB";
       
