@@ -66,6 +66,29 @@ function getTime(city) {
       .catch(err => console.error(err));
 }
 
+document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Here you would typically send the form data to your server
+    // For demonstration, we'll just show a success message and redirect
+    
+    // Show success message
+    alert('Thank you for submitting your mosque details! We will verify and add it soon. Redirecting you to our WhatsApp group...');
+    
+    // WhatsApp group link (replace with your actual WhatsApp group link)
+    const whatsappGroupLink = "https://chat.whatsapp.com/H2hWPyy0ngM7Fu1UA7SZBB";
+    
+    // Redirect to WhatsApp group
+    window.location.href = whatsappGroupLink;
+    
+    // Optional: Close the modal after redirection
+    var modal = bootstrap.Modal.getInstance(document.getElementById('findMosqueModal'));
+    modal.hide();
+    
+    // Optional: Reset the form
+    this.reset();
+});
+
 // Mosque Request Form Submission
 document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
     e.preventDefault();

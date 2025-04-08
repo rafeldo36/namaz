@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namaz Timing</title>
+  <link rel="icon" type="image/x-icon" href="./mosque-solid.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef&display=swap" rel="stylesheet">
@@ -48,84 +49,84 @@
     </nav>
 
     <!-- Find Mosque Modal -->
-<div class="modal fade" id="findMosqueModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Find Your Mosque</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="mosqueSearch" placeholder="Search by mosque name or place...">
-                    <button class="btn btn-primary" type="button" id="searchMosqueBtn">
-                        <i class="fas fa-search"></i> Search
-                    </button>
+    <div class="modal fade" id="findMosqueModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Find Your Mosque</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="searchResults" class="mt-3"></div>
-                
-                <!-- Can't Find Mosque Section -->
-                <div class="text-center mt-4">
-                    <button class="btn btn-outline-warning" data-bs-toggle="collapse" data-bs-target="#mosqueRequestForm">
-                        <i class="fas fa-question-circle"></i> Can't Find Your Mosque?
-                    </button>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="mosqueSearch" placeholder="Search by mosque name or place...">
+                        <button class="btn btn-primary" type="button" id="searchMosqueBtn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div id="searchResults" class="mt-3"></div>
                     
-                    <div id="mosqueRequestForm" class="collapse mt-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Submit Mosque Details</h5>
-                                <p>We'll add it to our database after verification</p>
-                                
-                                <form id="mosqueRequestForm">
-                                    <div class="mb-3">
-                                        <label class="form-label">Mosque Name*</label>
-                                        <input type="text" class="form-control" id="requestMosqueName" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Location*</label>
-                                        <input type="text" class="form-control" id="requestMosqueLocation" required>
-                                    </div>
-                                    <div class="row g-3">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Fajr Time</label>
-                                            <input type="time" class="form-control" id="requestFajrTime">
+                    <!-- Can't Find Mosque Section -->
+                    <div class="text-center mt-4">
+                        <button class="btn btn-outline-warning" data-bs-toggle="collapse" data-bs-target="#mosqueRequestForm">
+                            <i class="fas fa-question-circle"></i> Can't Find Your Mosque?
+                        </button>
+                        
+                        <div id="mosqueRequestForm" class="collapse mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Submit Mosque Details</h5>
+                                    <p>We'll add it to our database after verification</p>
+                                    
+                                    <form id="mosqueRequestForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Mosque Name*</label>
+                                            <input type="text" class="form-control" id="requestMosqueName" required>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Zuhr Time</label>
-                                            <input type="time" class="form-control" id="requestZuhrTime">
+                                        <div class="mb-3">
+                                            <label class="form-label">Location*</label>
+                                            <input type="text" class="form-control" id="requestMosqueLocation" required>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Asr Time</label>
-                                            <input type="time" class="form-control" id="requestAsrTime">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Fajr Time</label>
+                                                <input type="time" class="form-control" id="requestFajrTime">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Zuhr Time</label>
+                                                <input type="time" class="form-control" id="requestZuhrTime">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Asr Time</label>
+                                                <input type="time" class="form-control" id="requestAsrTime">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Maghrib Time</label>
+                                                <input type="time" class="form-control" id="requestMaghribTime">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Isha Time</label>
+                                                <input type="time" class="form-control" id="requestIshaTime">
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Maghrib Time</label>
-                                            <input type="time" class="form-control" id="requestMaghribTime">
+                                        <div class="mb-3 mt-3">
+                                            <label class="form-label">Your Email (optional)</label>
+                                            <input type="email" class="form-control" id="requestUserEmail">
                                         </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">Isha Time</label>
-                                            <input type="time" class="form-control" id="requestIshaTime">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 mt-3">
-                                        <label class="form-label">Your Email (optional)</label>
-                                        <input type="email" class="form-control" id="requestUserEmail">
-                                    </div>
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-paper-plane"></i> Submit Request
-                                    </button>
-                                </form>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-paper-plane"></i> Submit Request
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Add Mosque Modal -->
     <div class="modal fade" id="addMosqueModal" tabindex="-1" aria-hidden="true">
