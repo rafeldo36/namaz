@@ -66,11 +66,23 @@ function getTime(city) {
       .catch(err => console.error(err));
 }
 
-// Mosque Request Form Submission
 document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Get form values
+    alert('Thank you for submitting your mosque details! We will verify and add it soon. Redirecting you to our WhatsApp group...');
+    
+    const whatsappGroupLink = "https://chat.whatsapp.com/H2hWPyy0ngM7Fu1UA7SZBB";
+    
+    window.location.href = whatsappGroupLink;
+    
+    var modal = bootstrap.Modal.getInstance(document.getElementById('findMosqueModal'));
+    modal.hide();
+    this.reset();
+});
+
+document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
     const mosqueName = document.getElementById('requestMosqueName').value;
     const mosqueLocation = document.getElementById('requestMosqueLocation').value;
     const userEmail = document.getElementById('requestUserEmail').value;
