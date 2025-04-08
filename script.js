@@ -80,11 +80,9 @@ document.getElementById('mosqueRequestForm').addEventListener('submit', function
     this.reset();
 });
 
-// Mosque Request Form Submission
 document.getElementById('mosqueRequestForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Get form values
     const mosqueName = document.getElementById('requestMosqueName').value;
     const mosqueLocation = document.getElementById('requestMosqueLocation').value;
     const userEmail = document.getElementById('requestUserEmail').value;
