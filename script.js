@@ -178,6 +178,10 @@ const firebaseConfig = {
     const searchLower = searchTerm.toLowerCase();
   
     Object.entries(mosques).forEach(([key, mosque]) => {
+
+        if (!mosque || !mosque.name || !mosque.place || !mosque.times) {
+            return;
+        }
         if (searchTerm && 
             !mosque.name.toLowerCase().includes(searchLower) && 
             !mosque.place.toLowerCase().includes(searchLower)) {
@@ -188,7 +192,7 @@ const firebaseConfig = {
         
         const mosqueElement = document.createElement('div');
         mosqueElement.className = 'card mb-3 mosque-result';
-        mosqueElement.innerHTML = `
+         mosqueElement.innerHTML = `
     <div class="card-body">
         <div class="row">
             <div class="col-md-${showEditButton ? '6' : '8'}">
@@ -201,26 +205,18 @@ const firebaseConfig = {
                     <i class="fas fa-edit"></i> Edit
                 </button>` : ''}
                 <button class="btn btn-success btn-sm save-mosque-btn" 
-        data-mosque-id="${key}"
-        data-mosque-name="${mosque.name}"
-        data-mosque-place="${mosque.place}"
-        data-fajr="${mosque.times.fajr}"
-        data-zuhr="${mosque.times.zuhr}"
-        data-asr="${mosque.times.asr}"
-        data-maghrib="${mosque.times.maghrib}"
-        data-isha="${mosque.times.isha}">
-    <i class="fas fa-home"></i> Save to Home
-</button>
+                        data-mosque-id="${key}"
+                        data-mosque-name="${encodeURIComponent(mosque.name)}"
+                        data-mosque-place="${encodeURIComponent(mosque.place)}"
+                        data-fajr="${mosque.times.fajr}"
+                        data-zuhr="${mosque.times.zuhr}"
+                        data-asr="${mosque.times.asr}"
+                        data-maghrib="${mosque.times.maghrib}"
+                        data-isha="${mosque.times.isha}">
+                    <i class="fas fa-home"></i> Save to Home
+                </button>
             </div>
         </div>
-        <div class="row mt-2">
-            ${['fajr', 'zuhr', 'asr', 'maghrib', 'isha'].map(prayer => `
-            <div class="col-6 col-md-2">
-                <small class="text-muted">${prayer.charAt(0).toUpperCase() + prayer.slice(1)}</small>
-                <p>${convertTo12Hour(mosque.times[prayer])}</p>
-            </div>`).join('')}
-        </div>
-    </div>
     `;
         resultsContainer.appendChild(mosqueElement);
     });
@@ -482,12 +478,6 @@ function loadSavedMosques() {
     document.getElementById('findMosqueModal').addEventListener('shown.bs.modal', () => {
         fetchMosquesForDisplay();
     });
-
-     document.addEventListener('click', function(e) {
-        if (e.target.closest('.save-mosque-btn')) {
-            console.log('Save button clicked', e.target);
-        }
-    });
       document.getElementById('searchResults').addEventListener('click', function(e) {
         if (e.target.closest('.save-mosque-btn')) {
             saveMosqueToHome(e);
@@ -518,14 +508,15 @@ function loadSavedMosques() {
     });
   });
   // Register Service Worker
+// Update service worker registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('sw.js')
             .then(registration => {
-                console.log('ServiceWorker registration successful');
+                console.log('ServiceWorker registration successful with scope:', registration.scope);
             })
             .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
+                console.log('ServiceWorker registration failed:', err);
             });
     });
 }

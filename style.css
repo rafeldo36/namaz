@@ -391,11 +391,18 @@ footer a:hover {
     color: #f8d56b;
 }
 
-/* Make sure button is visible */
+
+
+/* Add to style.css */
 .save-mosque-btn {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: white !important;
-    margin-top: 5px;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     white-space: nowrap;
+    margin: 2px;
+}
+
+/* Ensure the button column has enough space */
+.col-md-4.text-end, .col-md-6.text-end {
+    min-width: 150px;
 }
