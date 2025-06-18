@@ -344,13 +344,6 @@ footer a:hover {
     background-color: rgba(248, 213, 107, 0.1);
 }
 
-.save-mosque-btn {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: white;
-    transition: all 0.3s ease;
-}
-
 .save-mosque-btn:hover {
     background-color: #218838;
     border-color: #1e7e34;
@@ -361,29 +354,48 @@ footer a:hover {
     transform: translateY(0);
 }
 
-/* For iOS add to home screen prompt */
+/* Add to style.css */
 .ios-prompt {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 15px;
-    background: rgba(10, 58, 64, 0.9);
-    border-top: 1px solid #f8d56b;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background: rgba(10, 58, 64, 0.95);
+    border-top: 2px solid #f8d56b;
+    color: white;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
 }
 
 .ios-prompt button {
-    background: #f8d56b;
-    color: #0a3a40;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
-.ios-prompt button:hover {
-    background: #e6c35d;
+.ios-instructions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #f8d56b;
+}
+
+/* Make sure button is visible */
+.save-mosque-btn {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white !important;
+    margin-top: 5px;
+    white-space: nowrap;
 }

@@ -201,16 +201,16 @@ const firebaseConfig = {
                     <i class="fas fa-edit"></i> Edit
                 </button>` : ''}
                 <button class="btn btn-success btn-sm save-mosque-btn" 
-                        data-mosque-id="${key}"
-                        data-mosque-name="${mosque.name}"
-                        data-mosque-place="${mosque.place}"
-                        data-fajr="${mosque.times.fajr}"
-                        data-zuhr="${mosque.times.zuhr}"
-                        data-asr="${mosque.times.asr}"
-                        data-maghrib="${mosque.times.maghrib}"
-                        data-isha="${mosque.times.isha}">
-                    <i class="fas fa-home"></i> Save to Home
-                </button>
+        data-mosque-id="${key}"
+        data-mosque-name="${mosque.name}"
+        data-mosque-place="${mosque.place}"
+        data-fajr="${mosque.times.fajr}"
+        data-zuhr="${mosque.times.zuhr}"
+        data-asr="${mosque.times.asr}"
+        data-maghrib="${mosque.times.maghrib}"
+        data-isha="${mosque.times.isha}">
+    <i class="fas fa-home"></i> Save to Home
+</button>
             </div>
         </div>
         <div class="row mt-2">
@@ -231,7 +231,9 @@ const firebaseConfig = {
   }
   
   // Save mosque to localStorage and handle PWA installation
+// Update the saveMosqueToHome function
 function saveMosqueToHome(e) {
+    e.preventDefault();
     const button = e.target.closest('.save-mosque-btn');
     if (!button) return;
     
@@ -253,49 +255,62 @@ function saveMosqueToHome(e) {
     savedMosques[mosqueData.id] = mosqueData;
     localStorage.setItem('savedMosques', JSON.stringify(savedMosques));
     
-    // Check if this is a PWA (installed to home screen)
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-        alert(`${mosqueData.name} has been saved to your favorites!`);
-    } else {
-        showAddToHomeScreenPrompt(mosqueData);
+    // Show appropriate prompt based on device
+    showInstallPrompt(mosqueData.name);
+}
+
+// New improved prompt function
+function showInstallPrompt(mosqueName) {
+    // For Android/Chrome
+    if (window.deferredPrompt) {
+        const installConfirm = confirm(`Would you like to install ${mosqueName} prayer times as an app on your home screen?`);
+        if (installConfirm) {
+            window.deferredPrompt.prompt();
+            window.deferredPrompt.userChoice.then(choiceResult => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted install');
+                }
+                window.deferredPrompt = null;
+            });
+        }
+    } 
+    // For iOS
+    else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone) {
+        showIosInstallPrompt(mosqueName);
+    }
+    // For other browsers
+    else {
+        alert(`${mosqueName} has been saved to your favorites!`);
     }
 }
 
-// Show prompt to add to home screen
-function showAddToHomeScreenPrompt(mosqueData) {
-    // For mobile devices
-    if ('BeforeInstallPromptEvent' in window) {
-        // Save the event for later use
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show custom prompt
-            if (confirm(`Would you like to add ${mosqueData.name} to your home screen for quick access to prayer times?`)) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
-    } 
-    // For iOS devices
-    else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone) {
-        alert(`To add ${mosqueData.name} to your home screen:
-        1. Tap the Share button
-        2. Select "Add to Home Screen"
-        3. Tap "Add" in the top right corner`);
-    }
-    // For desktop browsers
-    else {
-        alert(`${mosqueData.name} has been saved to your favorites! 
-               You can now access it anytime by visiting this site.`);
-    }
+// iOS specific prompt
+function showIosInstallPrompt(mosqueName) {
+    const iosPrompt = document.createElement('div');
+    iosPrompt.className = 'ios-prompt';
+    iosPrompt.innerHTML = `
+        <span>Add ${mosqueName} to your home screen for quick access</span>
+        <button id="closeIosPrompt">✕</button>
+        <div class="ios-instructions">
+            Tap <i class="fas fa-share"></i> then "Add to Home Screen"
+        </div>
+    `;
+    
+    document.body.appendChild(iosPrompt);
+    
+    document.getElementById('closeIosPrompt').addEventListener('click', () => {
+        iosPrompt.remove();
+    });
+    
+    // Auto-close after 10 seconds
+    setTimeout(() => iosPrompt.remove(), 10000);
 }
+
+// Listen for beforeinstallprompt event
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    window.deferredPrompt = e;
+});
 
 // Load saved mosques on page load
 function loadSavedMosques() {
@@ -467,7 +482,17 @@ function loadSavedMosques() {
     document.getElementById('findMosqueModal').addEventListener('shown.bs.modal', () => {
         fetchMosquesForDisplay();
     });
-        document.getElementById('searchResults').addEventListener('click', saveMosqueToHome);
+
+     document.addEventListener('click', function(e) {
+        if (e.target.closest('.save-mosque-btn')) {
+            console.log('Save button clicked', e.target);
+        }
+    });
+      document.getElementById('searchResults').addEventListener('click', function(e) {
+        if (e.target.closest('.save-mosque-btn')) {
+            saveMosqueToHome(e);
+        }
+    });
     document.getElementById('editMosqueResults').addEventListener('click', saveMosqueToHome);
      loadSavedMosques();
     document.getElementById('editMosqueModal').addEventListener('shown.bs.modal', () => {
