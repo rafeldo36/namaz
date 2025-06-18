@@ -189,27 +189,38 @@ const firebaseConfig = {
         const mosqueElement = document.createElement('div');
         mosqueElement.className = 'card mb-3 mosque-result';
         mosqueElement.innerHTML = `
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-${showEditButton ? '8' : '12'}">
-                    <h5 class="card-title">${mosque.name}</h5>
-                    <p class="card-text"><i class="fas fa-map-marker-alt"></i> ${mosque.place}</p>
-                </div>
-                ${showEditButton ? `
-                <div class="col-md-4 text-end">
-                    <button class="btn btn-primary btn-sm" onclick="loadMosqueForEditing('${key}')">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                </div>` : ''}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-${showEditButton ? '6' : '8'}">
+                <h5 class="card-title">${mosque.name}</h5>
+                <p class="card-text"><i class="fas fa-map-marker-alt"></i> ${mosque.place}</p>
             </div>
-            <div class="row mt-2">
-                ${['fajr', 'zuhr', 'asr', 'maghrib', 'isha'].map(prayer => `
-                <div class="col-6 col-md-2">
-                    <small class="text-muted">${prayer.charAt(0).toUpperCase() + prayer.slice(1)}</small>
-                    <p>${convertTo12Hour(mosque.times[prayer])}</p>
-                </div>`).join('')}
+            <div class="col-md-${showEditButton ? '6' : '4'} text-end">
+                ${showEditButton ? `
+                <button class="btn btn-primary btn-sm me-2" onclick="loadMosqueForEditing('${key}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>` : ''}
+                <button class="btn btn-success btn-sm save-mosque-btn" 
+                        data-mosque-id="${key}"
+                        data-mosque-name="${mosque.name}"
+                        data-mosque-place="${mosque.place}"
+                        data-fajr="${mosque.times.fajr}"
+                        data-zuhr="${mosque.times.zuhr}"
+                        data-asr="${mosque.times.asr}"
+                        data-maghrib="${mosque.times.maghrib}"
+                        data-isha="${mosque.times.isha}">
+                    <i class="fas fa-home"></i> Save to Home
+                </button>
             </div>
         </div>
+        <div class="row mt-2">
+            ${['fajr', 'zuhr', 'asr', 'maghrib', 'isha'].map(prayer => `
+            <div class="col-6 col-md-2">
+                <small class="text-muted">${prayer.charAt(0).toUpperCase() + prayer.slice(1)}</small>
+                <p>${convertTo12Hour(mosque.times[prayer])}</p>
+            </div>`).join('')}
+        </div>
+    </div>
     `;
         resultsContainer.appendChild(mosqueElement);
     });
@@ -219,6 +230,82 @@ const firebaseConfig = {
     }
   }
   
+  // Save mosque to localStorage and handle PWA installation
+function saveMosqueToHome(e) {
+    const button = e.target.closest('.save-mosque-btn');
+    if (!button) return;
+    
+    const mosqueData = {
+        id: button.dataset.mosqueId,
+        name: button.dataset.mosqueName,
+        place: button.dataset.mosquePlace,
+        times: {
+            fajr: button.dataset.fajr,
+            zuhr: button.dataset.zuhr,
+            asr: button.dataset.asr,
+            maghrib: button.dataset.maghrib,
+            isha: button.dataset.isha
+        }
+    };
+    
+    // Save to localStorage
+    const savedMosques = JSON.parse(localStorage.getItem('savedMosques')) || {};
+    savedMosques[mosqueData.id] = mosqueData;
+    localStorage.setItem('savedMosques', JSON.stringify(savedMosques));
+    
+    // Check if this is a PWA (installed to home screen)
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        alert(`${mosqueData.name} has been saved to your favorites!`);
+    } else {
+        showAddToHomeScreenPrompt(mosqueData);
+    }
+}
+
+// Show prompt to add to home screen
+function showAddToHomeScreenPrompt(mosqueData) {
+    // For mobile devices
+    if ('BeforeInstallPromptEvent' in window) {
+        // Save the event for later use
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom prompt
+            if (confirm(`Would you like to add ${mosqueData.name} to your home screen for quick access to prayer times?`)) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+    } 
+    // For iOS devices
+    else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone) {
+        alert(`To add ${mosqueData.name} to your home screen:
+        1. Tap the Share button
+        2. Select "Add to Home Screen"
+        3. Tap "Add" in the top right corner`);
+    }
+    // For desktop browsers
+    else {
+        alert(`${mosqueData.name} has been saved to your favorites! 
+               You can now access it anytime by visiting this site.`);
+    }
+}
+
+// Load saved mosques on page load
+function loadSavedMosques() {
+    const savedMosques = JSON.parse(localStorage.getItem('savedMosques')) || {};
+    if (Object.keys(savedMosques).length > 0) {
+        // You could display these in a "Favorites" section if you want
+        console.log('Saved mosques:', savedMosques);
+    }
+}
+
   function convertTo12Hour(time24) {
       if (!time24) return '';
       
@@ -380,7 +467,9 @@ const firebaseConfig = {
     document.getElementById('findMosqueModal').addEventListener('shown.bs.modal', () => {
         fetchMosquesForDisplay();
     });
-    
+        document.getElementById('searchResults').addEventListener('click', saveMosqueToHome);
+    document.getElementById('editMosqueResults').addEventListener('click', saveMosqueToHome);
+     loadSavedMosques();
     document.getElementById('editMosqueModal').addEventListener('shown.bs.modal', () => {
         fetchMosquesForEdit();
     });
@@ -403,4 +492,15 @@ const firebaseConfig = {
         });
     });
   });
-  
+  // Register Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('ServiceWorker registration successful');
+            })
+            .catch(err => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    });
+}
